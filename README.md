@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/Lancher/increasing.svg?branch=master)](https://travis-ci.org/Lancher/increasing)
 
 # Increasing - Coloring Progress-Bar 
-Easy to use Progress-Bar for Command-Line/Terminal Applications
+✨🌈💥 Coloring Progress-Bar for Your Command-Line/Terminal Applications
 
 ## Install
 
