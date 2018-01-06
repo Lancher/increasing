@@ -13,6 +13,7 @@
 
 - [x] Progress-Bar 
 - [x] Testing on Travis-CI
+- [x] PyPi
 - [ ] Colors integrated with colorama
 - [ ] Windows support
 - [ ] Testing on Circle-CI
