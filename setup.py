@@ -9,7 +9,7 @@ setup(
     author='Shi Hao Liu',
     author_email='Steve.LiuShiHao@gmail.com',
     url='https://github.com/Lancher/increasing',
-    download_url='',
+    download_url='https://github.com/lancher/increasing/archive/0.1.tar.gz',
     keywords=['progress-bar', 'progressbar', 'python', 'command-line', 'terminal', 'python-library', 'cli'],
     classifiers=[],
 )
