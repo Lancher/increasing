@@ -12,6 +12,7 @@ BAR_TYPE = [
     'block',
     'rect',
     'rotate',
+    'text',
 ]
 
 BLOCK = [
@@ -63,6 +64,8 @@ class ProgressBar:
                 new_configs.append(self._check_rect_bar_config(config))
             elif config['type'] == 'rotate':
                 new_configs.append(self._check_rotate_bar_config(config))
+            elif config['type'] == 'text':
+                new_configs.append(self._check_text_bar_config(config))
         return new_configs
 
     def _check_basic_bar_config(self, config):
@@ -73,7 +76,7 @@ class ProgressBar:
             'open_symbol': config.get('open_symbol', '['),
             'close_symbol': config.get('close_symbol', ']'),
             'fill_symbol': config.get('fill_symbol', '='),
-            'unfill_symbol': config.get('fill_symbol', ' '),
+            'unfill_symbol': config.get('unfill_symbol', ' '),
             'cols': int(config.get('cols', 50)),
             'value': 0,
             'prefix': '',
@@ -89,7 +92,7 @@ class ProgressBar:
             'open_symbol': config.get('open_symbol', '['),
             'close_symbol': config.get('close_symbol', ']'),
             'fill_symbol': config.get('fill_symbol', '='),
-            'unfill_symbol': config.get('fill_symbol', ' '),
+            'unfill_symbol': config.get('unfill_symbol', ' '),
             'arrow_symbol': config.get('arrow_symbol', '>'),
             'cols': int(config.get('cols', 50)),
             'value': 0,
@@ -161,6 +164,17 @@ class ProgressBar:
         }
         return new_config
 
+    def _check_text_bar_config(self, config):
+        """Parse the passing text bar configuration and generate the new configuration.
+        """
+        new_config = {
+            'type': 'text',
+            'value': 0,
+            'prefix': '',
+            'suffix': '',
+        }
+        return new_config
+
     def update(self, configs):
         """Update the whole configurations.
         """
@@ -202,6 +216,8 @@ class ProgressBar:
                 out += self._render_basic_bar_output(config)
             elif config['type'] == 'rotate':
                 out += self._render_rotate_bar_output(config)
+            elif config['type'] == 'text':
+                out += self._render_text_bar_output(config)
         # ESC escape CSI to move cursor to previous line, u'\033[F'
         if self._cnt:
             out = '[F' * len(self._configs) + out
@@ -253,6 +269,12 @@ class ProgressBar:
         out += config['done_symbol'] if config['is_done'] else INDEF[config['cnt'] % 4]
         out += config['close_symbol'] + config['suffix'] + '\r\n'
         config['cnt'] += 1
+        return out
+
+    def _render_text_bar_output(self, config):
+        """Render concatenate string on rotate bar type.
+        """
+        out = config['prefix'] + config['suffix'] + '\r\n'
         return out
 
     def _write(self):

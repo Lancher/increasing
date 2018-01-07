@@ -30,6 +30,7 @@ class ProgressBarTest(unittest.TestCase):
                                  'close_symbol': '|', 'type': 'rect', 'cols': 50, 'value': 0.0, 'suffix': ''}
         self.rotate_init_config = {'open_symbol': '', 'prefix': '', 'cnt': 0, 'suffix': '', 'done_symbol': 'ok',
                                    'is_done': False, 'close_symbol': '', 'type': 'rotate', 'cols': 50, 'value': 0.0}
+        self.text_init_config = {'prefix': '', 'suffix': '', 'type': 'text', 'value': 0.0}
 
         self.basic_val_0_cols_10_output = '[' + ' ' * 10 + ']\r\n'
         self.arrow_val_0_cols_10_output = '[' + '>' + ' ' * 9 + ']\r\n'
@@ -37,6 +38,7 @@ class ProgressBarTest(unittest.TestCase):
         self.block_val_0_cols_10_output = '|' + ' ' * 10 + '|\r\n'
         self.rect_val_0_cols_10_output = '|' + ' ' * 10 + '|\r\n'
         self.rotate_cnt_0_cols_10_output = '-\r\n'
+        self.text_value_0_cols_10_output = '\r\n'
 
         self.basic_val_1_cols_10_output = '[' + '=' * 10 + ']\r\n'
         self.arrow_val_1_cols_10_output = '[' + '=' * 10 + ']\r\n'
@@ -44,13 +46,14 @@ class ProgressBarTest(unittest.TestCase):
         self.block_val_1_cols_10_output = '|' + '█' * 10 + '|\r\n'
         self.rect_val_1_cols_10_output = '|' + '■' * 10 + '|\r\n'
         self.rotate_cnt_1_cols_10_output = '\\\r\n'
+        self.text_val_1_cols_10_output = 'abc: def\r\n'
 
     def test_check_configs(self):
-        """Test empty, basic, arrow, shade, block, rect, rotate configurations
+        """Test empty, basic, arrow, shade, block, rect, rotate, text configurations
         """
         p = ProgressBar([])
         configs = p._check_configs([{}, {'type': 'basic'}, {'type': 'arrow'}, {'type': 'shade'}, {'type': 'block'},
-                                    {'type': 'rect'}, {'type': 'rotate'}])
+                                    {'type': 'rect'}, {'type': 'rotate'}, {'type': 'text'}])
 
         self.assertEqual(configs[0], self.basic_init_config)
         self.assertEqual(configs[1], self.basic_init_config)
@@ -59,6 +62,7 @@ class ProgressBarTest(unittest.TestCase):
         self.assertEqual(configs[4], self.block_init_config)
         self.assertEqual(configs[5], self.rect_init_config)
         self.assertEqual(configs[6], self.rotate_init_config)
+        self.assertEqual(configs[7], self.text_init_config)
 
     def test_update_config_by_index(self):
         """ Test updating configurations.
@@ -76,15 +80,17 @@ class ProgressBarTest(unittest.TestCase):
         """
         p = ProgressBar([{'cols': 10}, {'type': 'basic', 'cols': 10}, {'type': 'arrow', 'cols': 10},
                          {'type': 'shade', 'cols': 10}, {'type': 'block', 'cols': 10}, {'type': 'rect', 'cols': 10},
-                         {'type': 'rotate', 'cols': 10}])
+                         {'type': 'rotate', 'cols': 10}, {'type': 'text'}])
         self.assertEqual(p._render_output(), self.basic_val_0_cols_10_output + self.basic_val_0_cols_10_output +
                          self.arrow_val_0_cols_10_output + self.shade_val_0_cols_10_output +
                          self.block_val_0_cols_10_output + self.rect_val_0_cols_10_output +
-                         self.rotate_cnt_0_cols_10_output)
+                         self.rotate_cnt_0_cols_10_output + self.text_value_0_cols_10_output)
 
         for i in range(7):
             p._update_config_by_index(i, {'value': 1})
+        p._update_config_by_index(7, {'prefix': 'abc:', 'suffix': ' def'})
         self.assertEqual(p._render_output(), self.basic_val_1_cols_10_output +
                          self.basic_val_1_cols_10_output + self.arrow_val_1_cols_10_output +
                          self.shade_val_1_cols_10_output + self.block_val_1_cols_10_output +
-                         self.rect_val_1_cols_10_output + self.rotate_cnt_1_cols_10_output)
+                         self.rect_val_1_cols_10_output + self.rotate_cnt_1_cols_10_output +
+                         self.text_val_1_cols_10_output)
